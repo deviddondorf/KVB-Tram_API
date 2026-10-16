@@ -5,6 +5,13 @@ It is a very simple API wrapped around a scraper I build utilising the Beautiful
 The API is „compact“ as it owns no own data and every request is handled by the KVB website.
 It handles pretty much error and serves the departure data as a JSON.
 
+## Requirements
+fastapi
+uvicorn
+httpx
+pydantic
+beautifulsoup4
+
 ## License
 This project is licensed under the GNU General Public License v2.0 - see the [LICENSE](LICENSE) file for details.
 Copyright (c) 2026 Devid Dondorf
