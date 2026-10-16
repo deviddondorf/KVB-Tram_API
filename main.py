@@ -112,16 +112,6 @@ async def departures(
         fetched_at=datetime.now(),
         departures= departures[:limit],
     )
-"""
-KSTOPS: list[Stop] = [
-    Stop(station_id=24, station_name="Zülpicher Platz") #Cool name and there is an EDEKA I used to go to
-    , Stop(station_id=2, station_name="Neumarkt") #Because next to Schildergasse
-    , Stop(station_id=9, station_name="Dom/Hauptbahnhof") #Because of teh trainstation
-    , Stop(station_id=64, station_name="Barbarossaplatz") #The REWE there is cool
-    , Stop(station_id=22, station_name="Eifelstraße") #The station to my school
-    , Stop(station_id=7, station_name="Appelhofplatz") #Just a cool place
-] #Stops I frequently visited during my apprenticeship
-"""
 
 @app.get("/stops", tags=["stops"])
 async def list_stops(q: str | None = Query(None, description="Search stops by station name")):
