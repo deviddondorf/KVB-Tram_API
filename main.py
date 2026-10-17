@@ -1,6 +1,3 @@
-# Python API for KVB (Cologne Tram line)
-# Made by Devid Dondorf
-# Do what avery you want with it, it is just for me to learn programming and python
 
 import httpx
 from bs4 import BeautifulSoup
@@ -12,7 +9,7 @@ from pydantic import BaseModel
 app = FastAPI(
     title="Cologne Tram API",
     description="A Simple API for the KVB-Trams in Cologne. Pretty much a learning project by me to learn python and APIs",
-    version="0.1.0",
+    version="0.1.2",
 )
 app.add_middleware(
     CORSMiddleware,
@@ -45,7 +42,6 @@ class Stop(BaseModel):
 
 async def fetch_departures(station_id: int) -> str:
     url= KVBTram_QR_URL.format(station_id=station_id)
-    #print(html[:2000])
     try:
         async with httpx.AsyncClient(timeout=25, follow_redirects=True, headers=HEADERS) as client:
             response = await client.get(url)
@@ -96,27 +92,26 @@ async def root():
             "example": "/departures/24"} #Should be Zülpi :D (Zülpicher Platz)
 
 
-@app.get("/departures/{station_id}", response_model=DepatureResponse, tags=["departures"])
+@app.get("/departures/{station_id}", response_model=DepartureResponse, tags=["departures"])
 async def departures(
         station_id: int,
         limit: int = Query(10, ge=1, le=20, description="Limit the number of departures to return"),
 ):
     #Live Departs for a Stop, eg GET /departures/24?limit=5
     html = await fetch_departures(station_id)
-    station_name, departures = parse_departures(html)
-    if not departures:
+    station_name, pdepartures = parse_departures(html)
+    if not pdepartures:
         raise HTTPException(status_code=404, detail="No departures found")
-    return DepatureResponse(
+    return DepartureResponse(
         station_id=station_id,
         station_name=station_name,
         fetched_at=datetime.now(),
-        departures= departures[:limit],
+        departures= pdepartures[:limit],
     )
 
 @app.get("/stops", tags=["stops"])
 async def list_stops(q: str | None = Query(None, description="Search stops by station name")):
-    #List of Known Stops. For now will edit later
-    stops = KSTOPS
+    stops = None
     if q:
         stops = [s for s in stops if q.lower() in s.name.lower()]
     return {"stops": stops}
