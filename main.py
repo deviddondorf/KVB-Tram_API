@@ -15,7 +15,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
 )
-#Sad try to get rid of error 403
+
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"}
 r = httpx.get("https://www.kvb.koeln/generated/?aktion=show&code=24", headers=HEADERS, follow_redirects=True)
 with open("debug.html", "w", encoding="iso-8859-1") as f:
